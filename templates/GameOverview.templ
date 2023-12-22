@@ -3,9 +3,25 @@ package template
 import "github.com/tarow/skat-counter/internal/skat"
 import "github.com/tarow/skat-counter/templates/components"
 
+templ GameOverviewNavbar() {
+	<div class="navbar bg-base-200">
+		<div class="grid flex-grow grid-cols-3 justify-items-center">
+			<div></div>
+			<a class="btn btn-ghost text-xl" hx-boost="true" href="/" method="get">
+				Skatcounter
+			</a>
+			<button
+ 				onclick="create_game_modal.showModal()"
+ 				class="btn btn-accent justify-self-start"
+			>Create Game</button>
+			@components.CreateGameForm()
+		</div>
+	</div>
+}
+
 templ GameOverview(games []skat.Game) {
 	@Base() {
-		@Navbar()
+		@GameOverviewNavbar()
 		@components.GameList(games)
 	}
 }

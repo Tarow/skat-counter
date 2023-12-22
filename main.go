@@ -22,9 +22,11 @@ type Form struct {
 }
 
 func registerRoutes(e *echo.Echo, handler api.Handler) {
+	e.Static("/static", "./static")
 	e.GET("/", handler.GetIndex)
 
 	e.GET("/games/:id", handler.GetGameDetails)
+	e.GET("/games/create", handler.GetCreateGameForm)
 
 	e.Any("/test", func(c echo.Context) error {
 		//body, _ := io.ReadAll(c.Request().Body)

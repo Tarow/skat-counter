@@ -1,27 +1,16 @@
 package template
 
-templ Navbar() {
-	<div class="navbar bg-base-200">
-		<div class="grid flex-grow grid-cols-3 justify-items-center">
-			<div></div>
-			<a class="btn btn-ghost text-xl" hx-boost="true" href="/" method="get">
-				Skatcounter
-			</a>
-			<button class="btn btn-accent justify-self-start">Create Game</button>
-		</div>
-	</div>
-}
-
 templ Base() {
+	<!DOCTYPE html>
 	<html data-theme="dim">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>Skatcounter</title>
 			<link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
-			<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-			<script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js"></script>
-			<script src="https://cdn.jsdelivr.net/npm/sortablejs/Sortable.min.js"></script>
+			<script src="/static/tailwind.js"></script>
+			<script src="/static/htmx.js"></script>
+			<script src="/static/sortable.js"></script>
 		</head>
 		<body>
 			{ children... }
@@ -47,5 +36,5 @@ script initSortable() {
 
       });
     }
-})
+	})
 }

@@ -1,55 +1,83 @@
 package components
 
 templ PlayerInput() {
-	<form class="tag-input sortable" id="tagInput">
-		<input type="text" name="playername" id="hiddenInput" onkeydown="handleKeyDown(event)"/>
-		<button type="submit" class="btn btn-primary" hx-post="/test" hx-swap="none" hx-include="#tagInput">Submit</button>
-	</form>
+	<div class="grid grid-cols-6 gap-3 items-center">
+		<div class="sortable col-span-3" id="player_names">
+			<input type="text" placeholder="Enter Player Name" class="input input-bordered" name="playername" id="player_input" onkeydown="handleKeyDown(event)"/>
+		</div>
+		<div class="col-span-3">
+			<p class="flex justify-center">Players (Drag to sort)</p>
+		</div>
+		<div class="col-span-3 col-start-4">
+			<div id="player_names">
+				<div class="flex flex-col gap-2 sortable" id="player_list"></div>
+			</div>
+		</div>
+	</div>
 	<script>
-    const tagInput = document.getElementById('tagInput');
-    const hiddenInput = document.getElementById('hiddenInput');
-
     function handleKeyDown(event) {
-        console.log("handlekey was triggered")
         if (event.key === 'Enter') {
-        event.preventDefault();
-        const tagText = hiddenInput.value.trim();
+          event.preventDefault();
+          const playerInput = document.getElementById('player_input');
+          const playerName = playerInput.value.trim();
 
-        if (tagText !== '') {
-            addTag(tagText);
-            hiddenInput.value = '';
+          if (playerName !== '') {
+              addPlayer(playerName);
+              playerInput.value = '';
+          }
         }
-        }
     }
 
-    function addTag(text) {
-        const tag = document.createElement('div');
-        tag.innerHTML=text
+    function addPlayer(text) {
+      const wrapper = document.getElementById('player_list');
 
-        const tagInputField = document.createElement('input');
-        tagInputField.className = 'tag-input-field';
-        tagInputField.type = 'text';
-        tagInputField.value = text;
-        tagInputField.hidden = true;
-        tagInputField.name="playername"
+      const divElement = document.createElement('div');
+      divElement.className = 'flex items-end';
 
-        const tagClose = document.createElement('span');
-        tagClose.className = 'tag-close';
-        tagClose.textContent = '×';
-        tagClose.addEventListener('click', () => removeTag(tag));
+      // Create input element
+      const inputElement = document.createElement('input');
+      inputElement.type = 'text';
+      inputElement.name = 'playername';
+      inputElement.value = text;
+      inputElement.setAttribute('hidden', 'true');
 
-        tag.appendChild(tagInputField);
-        tag.appendChild(tagClose);
+      // Create span element
+      const spanElement = document.createElement('div');
+      spanElement.className = 'pr-2 leading-relaxed'
+      spanElement.style.cursor = 'grab';
+      spanElement.appendChild(document.createTextNode(text));
 
-        tagInput.insertBefore(tag, hiddenInput);
+      // Create an SVG element
+      const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svgElement.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      svgElement.setAttribute('class', 'h-6 w-6');
+      svgElement.setAttribute('fill', 'none');
+      svgElement.setAttribute('viewBox', '0 0 24 24');
+      svgElement.setAttribute('stroke', 'currentColor');
+
+      // Create path element inside svg
+      const pathElement = document.createElementNS('http://www.w3.org/2000/svg',"path");  
+      pathElement.setAttribute('stroke-linecap', 'round');
+      pathElement.setAttribute('stroke-linejoin', 'round');
+      pathElement.setAttribute('stroke-width', '2');
+      pathElement.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+
+      // Append path to svg
+      svgElement.appendChild(pathElement);
+
+      // Append input, span, and svg elements to the div
+      divElement.appendChild(inputElement);
+      divElement.appendChild(spanElement);
+      divElement.appendChild(svgElement);
+
+      svgElement.addEventListener('click', () => wrapper.removeChild(divElement));
+      wrapper.appendChild(divElement)
     }
 
-    function removeTag(tag) {
-        tagInput.removeChild(tag);
-    }
 
-    function focusInput() {
-        hiddenInput.focus();
-    }
   </script>
+}
+
+script addPlayer() {
+
 }

@@ -3,9 +3,19 @@ package template
 import "github.com/tarow/skat-counter/internal/skat"
 import "fmt"
 
+templ GameDetailsNavbar() {
+	<div class="navbar bg-base-200">
+		<div class="grid flex-grow grid-cols-3 justify-items-center">
+			<a class="col-span-3 btn btn-ghost text-xl" hx-boost="true" href="/" method="get">
+				Skatcounter
+			</a>
+		</div>
+	</div>
+}
+
 templ GameDetails (game skat.Game) {
 	@Base() {
-		@Navbar()
+		@GameDetailsNavbar()
 		<div>
 			Details for Game with id { fmt.Sprintf("%v", game.Id) }
 		</div>
