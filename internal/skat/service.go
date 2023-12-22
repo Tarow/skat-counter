@@ -1,6 +1,9 @@
 package skat
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type Service struct {
 }
@@ -60,11 +63,11 @@ func (s Service) List() []Game {
 	return db
 }
 
-func (s Service) Find(gameId int) *Game {
+func (s Service) Find(gameId int) (Game, error) {
 	for _, e := range db {
 		if gameId == e.Id {
-			return &e
+			return e, nil
 		}
 	}
-	return nil
+	return Game{}, fmt.Errorf("no game found with id %v", gameId)
 }

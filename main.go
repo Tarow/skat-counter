@@ -24,6 +24,8 @@ type Form struct {
 func registerRoutes(e *echo.Echo, handler api.Handler) {
 	e.GET("/", handler.GetIndex)
 
+	e.GET("/games/:id", handler.GetGameDetails)
+
 	e.Any("/test", func(c echo.Context) error {
 		//body, _ := io.ReadAll(c.Request().Body)
 		//fmt.Printf("received request on test endpoint: %v\n", string(body))

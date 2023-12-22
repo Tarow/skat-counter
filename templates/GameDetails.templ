@@ -1,6 +1,13 @@
 package template
 
 import "github.com/tarow/skat-counter/internal/skat"
+import "fmt"
 
 templ GameDetails (game skat.Game) {
+	@Base() {
+		@Navbar()
+		<div>
+			Details for Game with id { fmt.Sprintf("%v", game.Id) }
+		</div>
+	}
 }

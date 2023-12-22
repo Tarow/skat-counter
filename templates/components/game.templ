@@ -3,14 +3,11 @@ package components
 import "github.com/tarow/skat-counter/internal/skat"
 import "fmt"
 
-func formatDate() {
-
-}
-
 templ Game(game skat.Game) {
-	<div class="card w-96 bg-neutral shadow-xl">
+	<div class="card w-96 image-full">
+		<figure><img src="https://w.wallhaven.cc/full/vm/wallhaven-vmgl8m.jpg" alt="Cards"/></figure>
 		<div class="flex justify-end">
-			<div class="badge mt-2 mr-2">
+			<div class="badge mr-2 mt-2 z-30">
 				if game.Online {
 					Online
 				} else {
@@ -18,7 +15,7 @@ templ Game(game skat.Game) {
 				}
 			</div>
 		</div>
-		<div class="card-body pt-2">
+		<div class="card-body pt-5">
 			<h2 class="card-title">{ game.GetDate() }</h2>
 			<div class="grid grid-cols-8 gap-y-2 items-center pt-3">
 				<div class="col-span-1">
@@ -52,7 +49,9 @@ templ Game(game skat.Game) {
 				</div>
 			</div>
 			<div class="card-actions justify-end">
-				<button class="btn btn-primary ">Details</button>
+				<a class="btn btn-primary" hx-boost="true" href={ templ.URL(fmt.Sprintf("/games/%v", game.Id)) } method="get">
+					Details
+				</a>
 			</div>
 		</div>
 	</div>

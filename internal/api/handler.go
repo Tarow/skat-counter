@@ -3,6 +3,7 @@ package skat
 import (
 	"context"
 	"net/http"
+	"strconv"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
@@ -23,6 +24,24 @@ func NewHandler(service skat.Service) Handler {
 func (h Handler) GetIndex(c echo.Context) error {
 	index := template.GameOverview(h.service.List())
 	return render(c, http.StatusOK, index)
+}
+
+func (h Handler) GetGameDetails(c echo.Context) error {
+	gameId := c.Param("id")
+
+	parsedId, err := strconv.Atoi(gameId)
+	if err != nil {
+		return err
+	}
+
+	game, err := h.service.Find(parsedId)
+	if err != nil {
+		return err
+	}
+
+	gameDetails := template.GameDetails(game)
+
+	return render(c, http.StatusOK, gameDetails)
 }
 
 func render(ctx echo.Context, status int, t templ.Component) error {

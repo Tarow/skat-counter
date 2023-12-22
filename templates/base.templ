@@ -4,14 +4,16 @@ templ Navbar() {
 	<div class="navbar bg-base-200">
 		<div class="grid flex-grow grid-cols-3 justify-items-center">
 			<div></div>
-			<h1 class="btn btn-ghost text-xl">Skatcounter</h1>
+			<a class="btn btn-ghost text-xl" hx-boost="true" href="/" method="get">
+				Skatcounter
+			</a>
 			<button class="btn btn-accent justify-self-start">Create Game</button>
 		</div>
 	</div>
 }
 
 templ Base() {
-	<html data-theme="dark">
+	<html data-theme="dim">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
