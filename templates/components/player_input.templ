@@ -1,0 +1,55 @@
+package components
+
+templ PlayerInput() {
+	<form class="tag-input sortable" id="tagInput">
+		<input type="text" name="playername" id="hiddenInput" onkeydown="handleKeyDown(event)"/>
+		<button type="submit" class="btn btn-primary" hx-post="/test" hx-swap="none" hx-include="#tagInput">Submit</button>
+	</form>
+	<script>
+    const tagInput = document.getElementById('tagInput');
+    const hiddenInput = document.getElementById('hiddenInput');
+
+    function handleKeyDown(event) {
+        console.log("handlekey was triggered")
+        if (event.key === 'Enter') {
+        event.preventDefault();
+        const tagText = hiddenInput.value.trim();
+
+        if (tagText !== '') {
+            addTag(tagText);
+            hiddenInput.value = '';
+        }
+        }
+    }
+
+    function addTag(text) {
+        const tag = document.createElement('div');
+        tag.innerHTML=text
+
+        const tagInputField = document.createElement('input');
+        tagInputField.className = 'tag-input-field';
+        tagInputField.type = 'text';
+        tagInputField.value = text;
+        tagInputField.hidden = true;
+        tagInputField.name="playername"
+
+        const tagClose = document.createElement('span');
+        tagClose.className = 'tag-close';
+        tagClose.textContent = '×';
+        tagClose.addEventListener('click', () => removeTag(tag));
+
+        tag.appendChild(tagInputField);
+        tag.appendChild(tagClose);
+
+        tagInput.insertBefore(tag, hiddenInput);
+    }
+
+    function removeTag(tag) {
+        tagInput.removeChild(tag);
+    }
+
+    function focusInput() {
+        hiddenInput.focus();
+    }
+  </script>
+}

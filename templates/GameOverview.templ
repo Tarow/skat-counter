@@ -1,0 +1,11 @@
+package template
+
+import "github.com/tarow/skat-counter/internal/skat"
+import "github.com/tarow/skat-counter/templates/components"
+
+templ GameOverview(games []skat.Game) {
+	@Base() {
+		@Navbar()
+		@components.GameList(games)
+	}
+}
