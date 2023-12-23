@@ -1,0 +1,97 @@
+package components
+
+import "github.com/tarow/skat-counter/internal/skat"
+import "fmt"
+
+templ RoundsList(game skat.Game) {
+	<div class="overflow-x-auto">
+		<table class="table table-lg table-pin-rows">
+			<!-- head -->
+			<thead>
+				<tr>
+					<th></th>
+					for _, player := range game.Players {
+						<th>{ player }</th>
+					}
+					<th>Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				for i, round := range game.Rounds {
+					<tr class="text-center">
+						<td>{ fmt.Sprintf("%v", i+1) }</td>
+						for _, player := range game.Players {
+							<td>{ formatRoundScore(round.GetRoundScore(player)) }</td>
+						}
+						<td>{ fmt.Sprintf("%v", round.Value) }</td>
+					</tr>
+				}
+			</tbody>
+			<tfoot class="border">
+				<tr>
+					<td class="text-center">Total</td>
+					for _, player := range game.Players {
+						<td class="text-center">{ fmt.Sprintf("%v", game.GetTotalPlayerScore(player) ) }</td>
+					}
+					<th class="text-center"></th>
+				</tr>
+				<tr>
+					<td>Payment</td>
+					for _, player := range game.Players {
+						<td class="text-center">{ fmt.Sprintf("%.2f €", float32(game.GetTotalPlayerScore(player))*game.Stake / float32(100)) }</td>
+					}
+					<th class="text-center">{ fmt.Sprintf("%.2f €", float32(game.GetTotalPayment()) / float32(100)) }</th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+}
+
+templ AddRoundForm(game skat.Game) {
+	<div class="card  bg-base-200 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">Round { fmt.Sprintf("%v", len(game.Rounds) + 1 ) }</h2>
+			<form>
+				<div class="flex flex-row flex-wrap gap-2 pb-4">
+					for _, player := range game.Players {
+						<label class="form-control">
+							<div class="label">
+								<span class="label-text">{ player }</span>
+							</div>
+							<select name={ player } class="select select-sm select-bordered  w-full">
+								<option selected disabled value="">-</option>
+								<option value="declarer">Declarer</option>
+								<option value="opponent">Opponent</option>
+								<option value="dealer">Dealer</option>
+							</select>
+						</label>
+					}
+				</div>
+				<div class="flex flex-row flex-wrap gap-6 items-center">
+					<div class="form-control">
+						<div class="label">
+							<span class="label-text">Game Value</span>
+						</div>
+						<input id="gamevalue" name="gamevalue" type="number" min="1" max="300" class="w-48 input input-sm input-bordered"/>
+					</div>
+					<div class="form-control">
+						<label class="cursor-pointer flex items-center gap-2">
+							<span class="label-text">Won</span>
+							<input checked value="true" id="won" name="won" type="checkbox" value="true" class="checkbox checkbox-primary"/>
+						</label>
+					</div>
+				</div>
+				<div class="card-actions justify-end">
+					<button hx-post={ fmt.Sprintf("/games/%v/rounds", game.Id) } hx-target="closest body" class="btn btn-primary">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+}
+
+func formatRoundScore(score *int) string {
+	if score == nil {
+		return "-"
+	}
+	return fmt.Sprintf("%v", *score)
+}

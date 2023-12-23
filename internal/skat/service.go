@@ -1,7 +1,7 @@
 package skat
 
 import (
-	"fmt"
+	"math/rand"
 	"time"
 )
 
@@ -12,62 +12,51 @@ func NewService() Service {
 	return Service{}
 }
 
-var db = []Game{
+var DB = []Game{
 	{
 		Id:      0,
-		Active:  false,
 		Started: time.Now().AddDate(0, 0, -1),
+		Stake:   2,
 		Ended:   nil,
 		Players: []string{"Jannik", "Moritz", "Manuel", "Niklas"},
 		Online:  false,
 		Rounds: []Round{
 			{
-				Dealer:    "Niklas",
+				Dealer:    "Jannik",
 				Declarer:  "Moritz",
-				Opponents: []string{"Jannik", "Manuel"},
+				Opponents: []string{"Niklas", "Manuel"},
 				Won:       true,
+				Value:     24,
 			},
 			{
-				Dealer:    "Niklas",
-				Declarer:  "Moritz",
-				Opponents: []string{"Jannik", "Manuel"},
+				Dealer:    "Moritz",
+				Declarer:  "Manuel",
+				Opponents: []string{"Jannik", "Niklas"},
 				Won:       false,
-			},
-		},
-	},
-	{
-		Id:      1,
-		Active:  true,
-		Started: time.Now(),
-		Ended:   nil,
-		Players: []string{"Jannik", "Moritz", "Manuel", "Niklas"},
-		Online:  true,
-		Rounds: []Round{
-			{
-				Dealer:    "Niklas",
-				Declarer:  "Moritz",
-				Opponents: []string{"Jannik", "Manuel"},
-				Won:       true,
-			},
-			{
-				Dealer:    "Niklas",
-				Declarer:  "Moritz",
-				Opponents: []string{"Jannik", "Manuel"},
-				Won:       false,
+				Value:     24,
 			},
 		},
 	},
 }
 
 func (s Service) List() []Game {
-	return db
+	return DB
 }
 
-func (s Service) Find(gameId int) (Game, error) {
-	for _, e := range db {
+func (s Service) Find(gameId int) *Game {
+	for i, e := range DB {
 		if gameId == e.Id {
-			return e, nil
+			return &DB[i]
 		}
 	}
-	return Game{}, fmt.Errorf("no game found with id %v", gameId)
+	return nil
+}
+
+func (s Service) Create(g Game) Game {
+	g.Id = rand.Intn(100)
+	g.Started = time.Now()
+	g.Ended = nil
+
+	DB = append(DB, g)
+	return g
 }

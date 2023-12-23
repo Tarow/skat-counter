@@ -3,7 +3,7 @@ package components
 templ CreateGameForm() {
 	<dialog id="create_game_modal" class="modal">
 		<div class="modal-box">
-			<form method="dialog">
+			<form id="create_game_form" method="dialog">
 				<div class="flex flex-col gap-8">
 					<h3 class="font-bold text-lg">Create Game</h3>
 					<div class="flex flex-row items-center flex-wrap justify-between">
@@ -12,9 +12,9 @@ templ CreateGameForm() {
 								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 1 0 0 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
 								</svg>
-								<span for="range" class="pl-2 label-text">Stake (Cents)</span>
+								<label for="range" class="pl-2 label-text">Stake (Cents)</label>
 							</div>
-							<input id="range" type="range" min="0.5" max="3" value="2" class="range" step="0.5"/>
+							<input name="stake" id="stake" type="range" min="0.5" max="3" value="2" class="range" step="0.5"/>
 							<div class="w-full flex justify-between text-xs px-2">
 								<span>0.5</span>
 								<span>1</span>
@@ -29,7 +29,7 @@ templ CreateGameForm() {
 							<div class="form-control">
 								<label class="cursor-pointer flex items-center gap-2">
 									<span class="label-text">Online</span>
-									<input type="checkbox" class="checkbox checkbox-primary"/>
+									<input name="online" type="checkbox" value="true" class="checkbox checkbox-primary"/>
 								</label>
 							</div>
 						</div>
@@ -38,10 +38,15 @@ templ CreateGameForm() {
 					@PlayerInput()
 				</div>
 				<div class="modal-action">
-					<button hx-post="/test" class="btn">Submit</button>
-					<button class="btn">Cancel</button>
+					<button hx-post="/games" hx-target="closest body" hx-swap="outerHTML" class="btn">Submit</button>
+					<button class="btn" onclick={ resetForm() }>Cancel</button>
 				</div>
 			</form>
 		</div>
 	</dialog>
+}
+
+script resetForm() {
+	document.getElementById('create_game_form').reset();
+	document.getElementById('player_list').replaceChildren();
 }
