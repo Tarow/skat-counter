@@ -24,7 +24,7 @@ templ Game(game skat.Game, showFooter bool) {
 					</svg>
 				</div>
 				//<div class="col-span-2">Players</div>
-				<div class="col-span-7 flex flex-wrap">
+				<div class="col-span-7 flex flex-wrap gap-2">
 					for _, p := range game.Players {
 						<div class="badge">{ p }</div>
 					}
