@@ -1,10 +1,15 @@
 package main
 
 import (
+	"embed"
+
 	"github.com/labstack/echo/v4"
 	api "github.com/tarow/skat-counter/internal/api"
 	"github.com/tarow/skat-counter/internal/skat"
 )
+
+//go:embed static/*
+var staticAssets embed.FS
 
 func main() {
 	e := echo.New()
@@ -20,7 +25,7 @@ type Form struct {
 }
 
 func registerRoutes(e *echo.Echo, handler api.Handler) {
-	e.Static("/static", "./static")
+	e.StaticFS("/static", echo.MustSubFS(staticAssets, "static"))
 	e.GET("/", handler.GetIndex)
 
 	e.POST("/games", handler.CreateGame)
