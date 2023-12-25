@@ -5,13 +5,13 @@ import "fmt"
 
 templ RoundsList(game skat.Game) {
 	<div class="overflow-x-auto">
-		<table class="table table-lg table-pin-rows">
+		<table class="table table-lg table-pin-rows rounded-xl">
 			<!-- head -->
 			<thead>
-				<tr>
+				<tr class="text-center  ">
 					<th></th>
 					for _, player := range game.Players {
-						<th>{ player }</th>
+						<th>{ player.Name }</th>
 					}
 					<th>Value</th>
 				</tr>
@@ -27,7 +27,7 @@ templ RoundsList(game skat.Game) {
 					</tr>
 				}
 			</tbody>
-			<tfoot class="border">
+			<tfoot class="border-t">
 				<tr>
 					<td class="text-center">Total</td>
 					for _, player := range game.Players {
@@ -56,9 +56,9 @@ templ AddRoundForm(game skat.Game) {
 					for _, player := range game.Players {
 						<label class="form-control">
 							<div class="label">
-								<span class="label-text">{ player }</span>
+								<span class="label-text">{ player.Name }</span>
 							</div>
-							<select name={ player } class="select select-sm select-bordered  w-full">
+							<select name={ player.Name } class="select select-sm select-bordered  w-full">
 								<option selected disabled value="">-</option>
 								<option value="declarer">Declarer</option>
 								<option value="opponent">Opponent</option>
@@ -82,14 +82,14 @@ templ AddRoundForm(game skat.Game) {
 					</div>
 				</div>
 				<div class="card-actions justify-end">
-					<button hx-post={ fmt.Sprintf("/games/%v/rounds", game.Id) } hx-target="closest body" class="btn btn-primary">Submit</button>
+					<button hx-post={ fmt.Sprintf("/games/%v/rounds", game.ID) } hx-target="closest body" class="btn btn-primary">Submit</button>
 				</div>
 			</form>
 		</div>
 	</div>
 }
 
-func formatRoundScore(score *int) string {
+func formatRoundScore(score *int32) string {
 	if score == nil {
 		return "-"
 	}

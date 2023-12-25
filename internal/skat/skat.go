@@ -2,37 +2,27 @@ package skat
 
 import (
 	"slices"
-	"time"
+
+	"github.com/tarow/skat-counter/internal/skat/gen/model"
 )
 
 type Game struct {
-	Id      int
-	Started time.Time
-	Ended   *time.Time
-	Stake   float32  `form:"stake"`
-	Players []string `form:"player"`
-	Rounds  []Round  `form:"round"`
-	Online  bool     `form:"online"`
+	model.Game
+	Players []model.Player
+	Rounds  []Round
 }
 
 type Round struct {
-	Dealer    string
-	Declarer  string
-	Opponents []string
-	Won       bool
-	Value     int
-}
-
-func (g Game) IsActive() bool {
-	return g.Ended == nil || g.Ended.After(time.Now())
+	model.Round
+	Opponents []int32 `alias:"opponent.id"`
 }
 
 func (g Game) GetDate() string {
-	return g.Started.Format("Monday, 02.01.2006")
+	return g.CreatedAt.Format("Monday, 02.01.2006")
 }
 
-func (g Game) GetTotalPlayerScore(player string) int {
-	sum := 0
+func (g Game) GetTotalPlayerScore(player model.Player) int32 {
+	sum := int32(0)
 	for _, r := range g.Rounds {
 		roundScore := r.GetRoundScore(player)
 		if roundScore != nil {
@@ -43,7 +33,7 @@ func (g Game) GetTotalPlayerScore(player string) int {
 }
 
 func (g Game) GetTotalPayment() float32 {
-	sum := 0
+	sum := int32(0)
 	for _, player := range g.Players {
 		sum += g.GetTotalPlayerScore(player)
 	}
@@ -51,8 +41,8 @@ func (g Game) GetTotalPayment() float32 {
 	return float32(sum) * g.Stake
 }
 
-func (r Round) GetRoundScore(player string) *int {
-	if player == r.Declarer {
+func (r Round) GetRoundScore(player model.Player) *int32 {
+	if player.ID == r.Declarer {
 		if r.Won {
 			return intPtr(0)
 		} else {
@@ -60,7 +50,7 @@ func (r Round) GetRoundScore(player string) *int {
 		}
 	}
 
-	if slices.Contains(r.Opponents, player) {
+	if slices.Contains(r.Opponents, player.ID) {
 		if r.Won {
 			return &r.Value
 		} else {
@@ -71,6 +61,6 @@ func (r Round) GetRoundScore(player string) *int {
 	return nil
 }
 
-func intPtr(i int) *int {
+func intPtr(i int32) *int32 {
 	return &i
 }

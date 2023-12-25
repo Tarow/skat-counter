@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 	"github.com/tarow/skat-counter/internal/skat"
+	"github.com/tarow/skat-counter/internal/skat/gen/model"
 	template "github.com/tarow/skat-counter/templates"
-	"github.com/tarow/skat-counter/templates/components"
 )
 
 type Handler struct {
@@ -24,7 +26,12 @@ func NewHandler(service skat.Service) Handler {
 }
 
 func (h Handler) GetIndex(c echo.Context) error {
-	index := template.GameOverview(h.service.List())
+	games, err := h.service.List()
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+	index := template.GameOverview(games)
 	return render(c, http.StatusOK, index)
 }
 
@@ -33,13 +40,16 @@ func (h Handler) GetGameDetails(c echo.Context) error {
 
 	parsedId, err := strconv.Atoi(gameId)
 	if err != nil {
+		c.Logger().Error(err)
 		return err
 	}
 
-	game := h.service.Find(parsedId)
+	game, err := h.service.Find(int32(parsedId))
 	if err != nil {
+		c.Logger().Error(err)
 		return err
 	}
+	fmt.Printf("%+v", game)
 
 	gameDetails := template.GameDetails(*game)
 
@@ -47,50 +57,92 @@ func (h Handler) GetGameDetails(c echo.Context) error {
 }
 
 func (h Handler) CreateGame(c echo.Context) error {
+	createGameForm := struct {
+		Players []string `form:"player"`
+		Online  bool     `form:"online"`
+		Stake   float32  `form:"stake"`
+	}{}
+
+	err := c.Bind(&createGameForm)
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	players := []model.Player{}
+	for _, p := range createGameForm.Players {
+		players = append(players, model.Player{Name: p})
+	}
 	g := skat.Game{}
-	c.Bind(&g)
-	fmt.Println("received game", g)
-	g = h.service.Create(g)
-	fmt.Println("created game", g)
+	g.Players = players
+
+	g.Online = true
+	g.Stake = 1.5
+	g.CreatedAt = time.Now()
+
+	g, err = h.service.Create(g)
+	if err != nil {
+		return err
+	}
+
 	details := template.GameDetails(g)
 
 	c.Response().Header().Set("Access-Control-Expose-Headers", "*")
-	//c.Response().Header().Set("Access-Control-Allow-Origin", "*")
-	//c.Response().Header().Set("Access-Control-Allow-Headers", "*")
-	c.Response().Header().Set("HX-Push-Url", fmt.Sprintf("/games/%v", g.Id))
+	c.Response().Header().Set("HX-Push-Url", fmt.Sprintf("/games/%v", g.ID))
 
 	return render(c, http.StatusCreated, details)
+}
+
+func (h Handler) DeleteGame(c echo.Context) error {
+	gameId := c.Param("id")
+
+	parsedId, err := strconv.Atoi(gameId)
+	if err != nil {
+		return err
+	}
+
+	err = h.service.Delete(int32(parsedId))
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	return nil
 }
 
 func (h Handler) AddRound(c echo.Context) error {
 	gameId := c.Param("id")
 	parsedId, err := strconv.Atoi(gameId)
 	if err != nil {
+		c.Logger().Error(err)
 		return err
 	}
 
-	game := h.service.Find(parsedId)
+	game, err := h.service.Find(int32(parsedId))
 	if err != nil {
+		c.Logger().Error(err)
 		return err
 	}
-	fmt.Printf("rounds before: %+v", len(game.Rounds))
+
 	var params map[string]string = make(map[string]string)
 	c.Bind(&params)
 
 	round := skat.Round{}
+	round.GameID = game.ID
+	round.CreatedAt = time.Now()
 	for _, player := range game.Players {
-		role, exists := params[player]
+		role, exists := params[player.Name]
 		if !exists {
 			continue
 		}
 
 		switch role {
 		case "declarer":
-			round.Declarer = player
+			round.Declarer = player.ID
 		case "opponent":
-			round.Opponents = append(round.Opponents, player)
+			round.Opponents = append(round.Opponents, player.ID)
 		case "dealer":
-			round.Dealer = player
+			round.Dealer = &player.ID
 		}
 	}
 
@@ -98,6 +150,7 @@ func (h Handler) AddRound(c echo.Context) error {
 	if exists {
 		won, err := strconv.ParseBool(wonStr)
 		if err != nil {
+			c.Logger().Error(err)
 			return err
 		}
 		round.Won = won
@@ -107,20 +160,21 @@ func (h Handler) AddRound(c echo.Context) error {
 	if exists {
 		gameValue, err := strconv.Atoi(gameValueStr)
 		if err != nil {
+			c.Logger().Error(err)
 			return err
 		}
-		round.Value = gameValue
+		round.Value = int32(gameValue)
+	}
+
+	round, err = h.service.AddRound(game.ID, round)
+	if err != nil {
+		log.Error(err)
+		return err
 	}
 
 	game.Rounds = append(game.Rounds, round)
-	fmt.Printf("rounds after: %+v", len(game.Rounds))
 	gameDetails := template.GameDetails(*game)
 	return render(c, http.StatusCreated, gameDetails)
-}
-
-func (h Handler) GetCreateGameForm(c echo.Context) error {
-	form := components.CreateGameForm()
-	return render(c, http.StatusOK, form)
 }
 
 func render(ctx echo.Context, status int, t templ.Component) error {
@@ -128,6 +182,7 @@ func render(ctx echo.Context, status int, t templ.Component) error {
 
 	err := t.Render(context.Background(), ctx.Response().Writer)
 	if err != nil {
+		ctx.Logger().Error(err)
 		return ctx.String(http.StatusInternalServerError, "failed to render response template")
 	}
 

@@ -20,7 +20,7 @@ templ GameDetails (game skat.Game) {
 			<div class="flex w-full flex-row flex-wrap-reverse gap-8 justify-around  items-end">
 				@components.RoundsList(game)
 				<div class="flex flex-col items-center gap-4">
-					@components.Game(game, false)
+					@components.GameCard(game, false)
 					@components.AddRoundForm(game)
 				</div>
 			</div>

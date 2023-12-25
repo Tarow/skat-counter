@@ -35,7 +35,7 @@ func GameOverviewNavbar() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a> <button onclick=\"create_game_modal.showModal()\" class=\"btn btn-accent justify-self-start\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a> <button onclick=\"create_game_modal.showModal()\" class=\"btn btn-primary justify-self-start\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

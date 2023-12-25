@@ -5,13 +5,17 @@ TAGS               := latest
 
 all: clean install gen tidy build
 
-run:
+run: gen
 	go run main.go
 
 dev:
 	air
 
-build:
+gen:
+	templ generate
+	jet -source=sqlite -dsn="./skat.sqlite" -schema=games -path=./internal/skat/gen
+
+build: gen
 	go build -o bin/$(BINARY_NAME) main.go
 
 clean:
