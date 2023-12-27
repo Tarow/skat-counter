@@ -2,7 +2,6 @@ package skat
 
 import (
 	"database/sql"
-	"fmt"
 	"slices"
 
 	"github.com/go-jet/jet/v2/sqlite"
@@ -60,7 +59,6 @@ func (s Service) Find(gameId int32) (*Game, error) {
 
 	game := Game{}
 	err := stmt.Query(s.db, &game)
-	fmt.Println(stmt.DebugSql())
 	if err != nil {
 		return &Game{}, err
 	}
@@ -68,7 +66,7 @@ func (s Service) Find(gameId int32) (*Game, error) {
 	return &game, nil
 }
 
-func (s Service) Create(g Game) (game Game, err error) {
+func (s Service) Create(g Game) (Game, error) {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return Game{}, err
@@ -144,6 +142,45 @@ func (s Service) Create(g Game) (game Game, err error) {
 	}
 
 	g.ID = int32(gameId)
+	return g, nil
+}
+
+func (s Service) Edit(g Game) (Game, error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return Game{}, err
+	}
+	defer tx.Rollback()
+
+	stmt := table.Game.UPDATE(table.Game.Stake, table.Game.Online).
+		MODEL(g).
+		WHERE(table.Game.ID.EQ(sqlite.Int32(g.ID)))
+
+	_, err = stmt.Exec(tx)
+	if err != nil {
+		return Game{}, err
+	}
+
+	for rank, player := range g.Players {
+		stmt := table.GamePlayer.UPDATE(table.GamePlayer.Rank).
+			MODEL(model.GamePlayer{
+				GameID:   g.ID,
+				PlayerID: player.ID,
+				Rank:     int32(rank),
+			}).
+			WHERE(table.GamePlayer.GameID.EQ(sqlite.Int32(g.ID)).
+				AND(table.GamePlayer.PlayerID.EQ(sqlite.Int32(player.ID))))
+		_, err = stmt.Exec(tx)
+		if err != nil {
+			return Game{}, err
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return Game{}, err
+	}
+
 	return g, nil
 }
 

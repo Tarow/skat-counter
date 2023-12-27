@@ -12,11 +12,16 @@ templ GameOverviewNavbar() {
 			</a>
 			<button
  				onclick="create_game_modal.showModal()"
+ 				hx-target="#create_game_form"
+ 				hx-get="/games/create"
  				class="btn btn-primary justify-self-start"
+ 				_="on htmx:afterSwap from #create_game_form call create_game_modal.showModal()"
 			>Create Game</button>
-			@components.CreateGameForm()
 		</div>
 	</div>
+	<dialog id="create_game_modal" class="modal">
+		<div id="create_game_form" class="modal-box"></div>
+	</dialog>
 }
 
 templ GameOverview(games []skat.Game) {

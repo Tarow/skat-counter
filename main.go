@@ -41,7 +41,13 @@ func registerRoutes(e *echo.Echo, handler api.Handler) {
 	e.GET("/", handler.GetIndex)
 
 	e.POST("/games", handler.CreateGame)
+	e.GET("/games/create", handler.GetCreateGameForm)
+
 	e.GET("/games/:id", handler.GetGameDetails)
+
+	e.GET("/games/:id/edit", handler.GetEditGameForm)
+	e.PUT("/games/:id/edit", handler.EditGame)
+
 	e.DELETE("/games/:id", handler.DeleteGame)
 	e.POST("/games/:id/rounds", handler.AddRound)
 

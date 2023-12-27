@@ -1,6 +1,9 @@
 package components
 
-templ CreateGameForm() {
+import "github.com/tarow/skat-counter/internal/skat"
+import "fmt"
+
+templ EditGameForm(g skat.Game) {
 	<form id="create_game_form" method="dialog">
 		<div class="flex flex-col gap-8">
 			<h3 class="font-bold text-lg">Create Game</h3>
@@ -12,7 +15,7 @@ templ CreateGameForm() {
 						</svg>
 						<label for="range" class="pl-2 label-text">Stake (Cents)</label>
 					</div>
-					<input name="stake" id="stake" type="range" min="0.5" max="3" value="2" class="range" step="0.5"/>
+					<input name="stake" id="stake" type="range" min="0.5" max="3" value={ fmt.Sprintf("%v", g.Stake) } class="range" step="0.5"/>
 					<div class="w-full flex justify-between text-xs px-2">
 						<span>0.5</span>
 						<span>1</span>
@@ -27,16 +30,26 @@ templ CreateGameForm() {
 					<div class="form-control">
 						<label class="cursor-pointer flex items-center gap-2">
 							<span class="label-text">Online</span>
-							<input name="online" type="checkbox" value="true" class="checkbox checkbox-primary"/>
+							<input name="online" type="checkbox" value="true" checked?={ g.Online } class="checkbox checkbox-primary"/>
 						</label>
 					</div>
 				</div>
 			</div>
 			<div class="divider -m-2"></div>
-			@PlayerInput()
+			<div class="flex flex-col gap-5 items-center">
+				<h3 class="label-text self-center">Players (Drag to order)</h3>
+				<div class="flex flex-col gap-2 sortable">
+					for _, player := range g.Players {
+						<div>
+							<div class="badge cursor-move">{ player.Name }</div>
+							<input hidden name="player" value={ player.Name }/>
+						</div>
+					}
+				</div>
+			</div>
 		</div>
 		<div class="modal-action">
-			<button hx-post="/games" hx-target="closest body" hx-swap="outerHTML" class="btn">Submit</button>
+			<button hx-put={ fmt.Sprintf("/games/%v/edit", g.ID) } hx-target="closest body" hx-swap="outerHTML" class="btn">Submit</button>
 			<button class="btn">Cancel</button>
 		</div>
 	</form>

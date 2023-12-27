@@ -4,15 +4,16 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"slices"
 	"strconv"
 	"time"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 	"github.com/tarow/skat-counter/internal/skat"
 	"github.com/tarow/skat-counter/internal/skat/gen/model"
 	template "github.com/tarow/skat-counter/templates"
+	"github.com/tarow/skat-counter/templates/components"
 )
 
 type Handler struct {
@@ -49,7 +50,6 @@ func (h Handler) GetGameDetails(c echo.Context) error {
 		c.Logger().Error(err)
 		return err
 	}
-	fmt.Printf("%+v", game)
 
 	gameDetails := template.GameDetails(*game)
 
@@ -57,27 +57,27 @@ func (h Handler) GetGameDetails(c echo.Context) error {
 }
 
 func (h Handler) CreateGame(c echo.Context) error {
-	createGameForm := struct {
+	form := struct {
 		Players []string `form:"player"`
 		Online  bool     `form:"online"`
 		Stake   float32  `form:"stake"`
 	}{}
 
-	err := c.Bind(&createGameForm)
+	err := c.Bind(&form)
 	if err != nil {
 		c.Logger().Error(err)
 		return err
 	}
 
 	players := []model.Player{}
-	for _, p := range createGameForm.Players {
+	for _, p := range form.Players {
 		players = append(players, model.Player{Name: p})
 	}
 	g := skat.Game{}
 	g.Players = players
 
-	g.Online = true
-	g.Stake = 1.5
+	g.Online = form.Online
+	g.Stake = form.Stake
 	g.CreatedAt = time.Now()
 
 	g, err = h.service.Create(g)
@@ -87,16 +87,59 @@ func (h Handler) CreateGame(c echo.Context) error {
 
 	details := template.GameDetails(g)
 
-	c.Response().Header().Set("Access-Control-Expose-Headers", "*")
 	c.Response().Header().Set("HX-Push-Url", fmt.Sprintf("/games/%v", g.ID))
 
 	return render(c, http.StatusCreated, details)
 }
 
-func (h Handler) DeleteGame(c echo.Context) error {
-	gameId := c.Param("id")
+func (h Handler) GetEditGameForm(c echo.Context) error {
+	game, err := h.findGame(c.Param("id"))
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
 
-	parsedId, err := strconv.Atoi(gameId)
+	form := components.EditGameForm(*game)
+	return render(c, http.StatusOK, form)
+}
+
+func (h Handler) EditGame(c echo.Context) error {
+	game, err := h.findGame(c.Param("id"))
+	if err != nil {
+		return err
+	}
+
+	form := struct {
+		Players []string `form:"player"`
+		Online  bool     `form:"online"`
+		Stake   float32  `form:"stake"`
+	}{}
+	c.Bind(&form)
+
+	game.Online = form.Online
+	game.Stake = form.Stake
+
+	slices.SortFunc(game.Players, func(i, j model.Player) int {
+		return slices.Index(form.Players, i.Name) - slices.Index(form.Players, j.Name)
+	})
+
+	updatedGame, err := h.service.Edit(*game)
+	if err != nil {
+		return err
+	}
+
+	details := template.GameDetails(updatedGame)
+
+	return render(c, http.StatusOK, details)
+}
+
+func (h Handler) GetCreateGameForm(c echo.Context) error {
+	form := components.CreateGameForm()
+	return render(c, http.StatusOK, form)
+}
+
+func (h Handler) DeleteGame(c echo.Context) error {
+	parsedId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return err
 	}
@@ -107,20 +150,20 @@ func (h Handler) DeleteGame(c echo.Context) error {
 		return err
 	}
 
-	return nil
-}
-
-func (h Handler) AddRound(c echo.Context) error {
-	gameId := c.Param("id")
-	parsedId, err := strconv.Atoi(gameId)
+	games, err := h.service.List()
 	if err != nil {
 		c.Logger().Error(err)
 		return err
 	}
+	index := template.GameOverview(games)
+	c.Response().Header().Set("HX-Push-Url", "/")
 
-	game, err := h.service.Find(int32(parsedId))
+	return render(c, http.StatusOK, index)
+}
+
+func (h Handler) AddRound(c echo.Context) error {
+	game, err := h.findGame(c.Param("id"))
 	if err != nil {
-		c.Logger().Error(err)
 		return err
 	}
 
@@ -168,7 +211,6 @@ func (h Handler) AddRound(c echo.Context) error {
 
 	round, err = h.service.AddRound(game.ID, round)
 	if err != nil {
-		log.Error(err)
 		return err
 	}
 
@@ -187,4 +229,13 @@ func render(ctx echo.Context, status int, t templ.Component) error {
 	}
 
 	return nil
+}
+
+func (h Handler) findGame(gameId string) (*skat.Game, error) {
+	parsedId, err := strconv.Atoi(gameId)
+	if err != nil {
+		return nil, err
+	}
+
+	return h.service.Find(int32(parsedId))
 }
