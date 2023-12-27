@@ -49,8 +49,11 @@ func registerRoutes(e *echo.Echo, handler api.Handler) {
 	e.PUT("/games/:id/edit", handler.EditGame)
 
 	e.DELETE("/games/:id", handler.DeleteGame)
-	e.POST("/games/:id/rounds", handler.AddRound)
 
+	e.POST("/games/:id/rounds", handler.AddRound)
+	e.GET("/games/:gameid/rounds/:roundid", handler.GetEditRoundForm)
+	e.PUT("/games/:gameid/rounds/:roundid", handler.EditRound)
+	e.DELETE("/games/:gameid/rounds/:roundid", handler.DeleteRound)
 }
 func createTables(db *sql.DB) error {
 	_, err := db.Exec(`

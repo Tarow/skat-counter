@@ -26,11 +26,11 @@ func EditGameForm(g skat.Game) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"create_game_form\" method=\"dialog\"><div class=\"flex flex-col gap-8\"><h3 class=\"font-bold text-lg\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form method=\"dialog\"><div class=\"flex flex-col gap-8\"><h3 class=\"font-bold text-lg\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var2 := `Create Game`
+		templ_7745c5c3_Var2 := `Edit Game`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -106,7 +106,7 @@ func EditGameForm(g skat.Game) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div></div><div class=\"divider divider-horizontal \"></div><div class=\"flex-shrink\"><div class=\"form-control\"><label class=\"cursor-pointer flex items-center gap-2\"><span class=\"label-text\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div></div><div class=\"divider divider-horizontal\"></div><div class=\"flex-shrink\"><div class=\"form-control\"><label class=\"cursor-pointer flex items-center gap-2\"><span class=\"label-text\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -4,9 +4,9 @@ import "github.com/tarow/skat-counter/internal/skat"
 import "fmt"
 
 templ EditGameForm(g skat.Game) {
-	<form id="create_game_form" method="dialog">
+	<form method="dialog">
 		<div class="flex flex-col gap-8">
-			<h3 class="font-bold text-lg">Create Game</h3>
+			<h3 class="font-bold text-lg">Edit Game</h3>
 			<div class="flex flex-row items-center flex-wrap justify-between">
 				<div class="flex-1">
 					<div class="flex flex-row pb-2">
@@ -25,7 +25,7 @@ templ EditGameForm(g skat.Game) {
 						<span>3</span>
 					</div>
 				</div>
-				<div class="divider divider-horizontal "></div>
+				<div class="divider divider-horizontal"></div>
 				<div class="flex-shrink">
 					<div class="form-control">
 						<label class="cursor-pointer flex items-center gap-2">

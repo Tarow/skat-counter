@@ -123,7 +123,7 @@ func (h Handler) EditGame(c echo.Context) error {
 		return slices.Index(form.Players, i.Name) - slices.Index(form.Players, j.Name)
 	})
 
-	updatedGame, err := h.service.Edit(*game)
+	updatedGame, err := h.service.EditGame(*game)
 	if err != nil {
 		return err
 	}
@@ -144,7 +144,7 @@ func (h Handler) DeleteGame(c echo.Context) error {
 		return err
 	}
 
-	err = h.service.Delete(int32(parsedId))
+	err = h.service.DeleteGame(int32(parsedId))
 	if err != nil {
 		c.Logger().Error(err)
 		return err
@@ -167,12 +167,107 @@ func (h Handler) AddRound(c echo.Context) error {
 		return err
 	}
 
+	round, err := parseRound(*game, c)
+	round.CreatedAt = time.Now()
+	if err != nil {
+		return err
+	}
+
+	round, err = h.service.AddRound(round)
+	if err != nil {
+		return err
+	}
+
+	game.Rounds = append(game.Rounds, round)
+	gameDetails := template.GameDetails(*game)
+	return render(c, http.StatusCreated, gameDetails)
+}
+
+func (h Handler) GetEditRoundForm(c echo.Context) error {
+	game, err := h.findGame(c.Param("gameid"))
+	if err != nil {
+		return err
+	}
+
+	roundId, err := strconv.Atoi(c.Param("roundid"))
+	if err != nil {
+		return err
+	}
+
+	var round skat.Round
+	var roundIdx int
+	for i, r := range game.Rounds {
+		if r.ID == int32(roundId) {
+			round = r
+			roundIdx = i
+		}
+	}
+
+	form := components.EditRoundForm(*game, round, roundIdx)
+	return render(c, http.StatusOK, form)
+}
+
+func (h Handler) EditRound(c echo.Context) error {
+	game, err := h.findGame(c.Param("gameid"))
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	parsedRoundId, err := strconv.Atoi(c.Param("roundid"))
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	round, err := parseRound(*game, c)
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+	round.ID = int32(parsedRoundId)
+
+	updatedRound, err := h.service.EditRound(round)
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	for i, round := range game.Rounds {
+		if updatedRound.ID == round.ID {
+			game.Rounds[i] = updatedRound
+			break
+		}
+	}
+
+	gameDetails := template.GameDetails(*game)
+	return render(c, http.StatusCreated, gameDetails)
+}
+
+func (h Handler) DeleteRound(c echo.Context) error {
+	parsedRoundId, err := strconv.Atoi(c.Param("roundid"))
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	h.service.DeleteRound(int32(parsedRoundId))
+
+	game, err := h.findGame(c.Param("gameid"))
+	if err != nil {
+		return err
+	}
+
+	gameDetails := template.GameDetails(*game)
+	return render(c, http.StatusCreated, gameDetails)
+}
+
+func parseRound(game skat.Game, c echo.Context) (skat.Round, error) {
 	var params map[string]string = make(map[string]string)
 	c.Bind(&params)
 
 	round := skat.Round{}
 	round.GameID = game.ID
-	round.CreatedAt = time.Now()
 	for _, player := range game.Players {
 		role, exists := params[player.Name]
 		if !exists {
@@ -185,16 +280,16 @@ func (h Handler) AddRound(c echo.Context) error {
 		case "opponent":
 			round.Opponents = append(round.Opponents, player.ID)
 		case "dealer":
-			round.Dealer = &player.ID
+			dealer := player.ID
+			round.Dealer = &dealer
 		}
 	}
-
 	wonStr, exists := params["won"]
 	if exists {
 		won, err := strconv.ParseBool(wonStr)
 		if err != nil {
 			c.Logger().Error(err)
-			return err
+			return skat.Round{}, err
 		}
 		round.Won = won
 	}
@@ -204,19 +299,12 @@ func (h Handler) AddRound(c echo.Context) error {
 		gameValue, err := strconv.Atoi(gameValueStr)
 		if err != nil {
 			c.Logger().Error(err)
-			return err
+			return skat.Round{}, err
 		}
 		round.Value = int32(gameValue)
 	}
 
-	round, err = h.service.AddRound(game.ID, round)
-	if err != nil {
-		return err
-	}
-
-	game.Rounds = append(game.Rounds, round)
-	gameDetails := template.GameDetails(*game)
-	return render(c, http.StatusCreated, gameDetails)
+	return round, nil
 }
 
 func render(ctx echo.Context, status int, t templ.Component) error {

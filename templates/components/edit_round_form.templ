@@ -1,0 +1,66 @@
+package components
+
+import "github.com/tarow/skat-counter/internal/skat"
+import "fmt"
+import "slices"
+
+const empty = ""
+
+templ EditRoundForm(game skat.Game, round skat.Round, roundIdx int) {
+	<div class="card bg-base-200 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">{ fmt.Sprintf("Edit Round %v", roundIdx + 1 ) }</h2>
+			<form method="dialog">
+				<div class="flex flex-row flex-wrap gap-2 pb-4">
+					for _, player := range game.Players {
+						<label class="form-control">
+							<div class="label">
+								<span class="label-text">{ player.Name }</span>
+							</div>
+							<select name={ player.Name } value="" class="select select-sm select-bordered w-full">
+								<option selected?={ getRole(round, player.ID) == empty } value="">-</option>
+								<option selected?={ getRole(round, player.ID) == "declarer" } value="declarer">Declarer</option>
+								<option selected?={ getRole(round, player.ID) == "opponent" } value="opponent">Opponent</option>
+								<option selected?={ getRole(round, player.ID) == "dealer" } value="dealer">Dealer</option>
+							</select>
+						</label>
+					}
+				</div>
+				<div class="flex flex-row flex-wrap gap-6 items-center">
+					<div class="form-control">
+						<div class="label">
+							<span class="label-text">Game Value</span>
+						</div>
+						<input id="gamevalue" required name="gamevalue" value={ toString(round.Value) } type="number" min="1" max="300" class="w-48 input input-sm input-bordered"/>
+					</div>
+					<div class="form-control">
+						<label class="cursor-pointer flex items-center gap-2">
+							<span class="label-text">Won</span>
+							<input checked?={ round.Won } value="true" id="won" name="won" type="checkbox" value="true" class="checkbox checkbox-primary"/>
+						</label>
+					</div>
+				</div>
+				<div class="card-actions justify-end pt-5 modal-action">
+					<button hx-put={ fmt.Sprintf("/games/%v/rounds/%v", game.ID, round.ID) } hx-target="closest body" class="btn btn-primary">Submit</button>
+					<button class="btn">Cancel</button>
+				</div>
+			</form>
+		</div>
+	</div>
+}
+
+func getRole(round skat.Round, playerId int32) string {
+	if round.Dealer != nil && playerId == *round.Dealer {
+		return "dealer"
+	}
+
+	if slices.Contains(round.Opponents, playerId) {
+		return "opponent"
+	}
+
+	if round.Declarer == playerId {
+		return "declarer"
+	}
+
+	return empty
+}
