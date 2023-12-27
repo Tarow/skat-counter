@@ -31,7 +31,7 @@ go install github.com/tarow/skat-counter@latest
 ### Docker
 
 ```bash
-docker run -v ./data:/app ghcr.io/tarow/skat-counter:latest
+docker run -v ./data:/app ghcr.io/tarow/skat-counter:main
 ```
 
 ### Docker Compose
