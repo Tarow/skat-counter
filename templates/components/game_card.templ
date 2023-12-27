@@ -1,4 +1,4 @@
-package components
+package component
 
 import "github.com/tarow/skat-counter/internal/skat"
 import "fmt"
@@ -93,7 +93,7 @@ templ GameCard(game skat.Game, detailsBtn, editBtn, deleteBtn bool) {
 
 templ GameList(games []skat.Game) {
 	<div class="container flex pt-4 mx-auto">
-		<div class="flex flex-row flex-wrap gap-8 justify-center">
+		<div class="flex w-full flex-row flex-wrap gap-8 justify-center">
 			for _, g := range games {
 				@GameCard(g, true, false, false)
 			}

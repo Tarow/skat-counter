@@ -27,6 +27,6 @@ templ GameOverviewNavbar() {
 templ GameOverview(games []skat.Game) {
 	@Base() {
 		@GameOverviewNavbar()
-		@components.GameList(games)
+		@component.GameList(games)
 	}
 }

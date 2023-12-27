@@ -13,7 +13,7 @@ import (
 	"github.com/tarow/skat-counter/internal/skat"
 	"github.com/tarow/skat-counter/internal/skat/gen/model"
 	template "github.com/tarow/skat-counter/templates"
-	"github.com/tarow/skat-counter/templates/components"
+	component "github.com/tarow/skat-counter/templates/components"
 )
 
 type Handler struct {
@@ -99,7 +99,7 @@ func (h Handler) GetEditGameForm(c echo.Context) error {
 		return err
 	}
 
-	form := components.EditGameForm(*game)
+	form := component.EditGameForm(*game)
 	return render(c, http.StatusOK, form)
 }
 
@@ -134,7 +134,7 @@ func (h Handler) EditGame(c echo.Context) error {
 }
 
 func (h Handler) GetCreateGameForm(c echo.Context) error {
-	form := components.CreateGameForm()
+	form := component.CreateGameForm()
 	return render(c, http.StatusOK, form)
 }
 
@@ -203,7 +203,7 @@ func (h Handler) GetEditRoundForm(c echo.Context) error {
 		}
 	}
 
-	form := components.EditRoundForm(*game, round, roundIdx)
+	form := component.EditRoundForm(*game, round, roundIdx)
 	return render(c, http.StatusOK, form)
 }
 

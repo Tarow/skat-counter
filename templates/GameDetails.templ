@@ -18,10 +18,10 @@ templ GameDetails (game skat.Game) {
 		@GameDetailsNavbar()
 		<div class="container flex pt-4 mx-auto">
 			<div class="flex w-full flex-row flex-wrap-reverse gap-8 justify-around  items-end">
-				@components.RoundsList(game)
+				@component.RoundsList(game)
 				<div class="flex flex-col items-center gap-4">
-					@components.GameCard(game, false, true, true)
-					@components.AddRoundForm(game)
+					@component.GameCard(game, false, true, true)
+					@component.AddRoundForm(game)
 				</div>
 			</div>
 		</div>
