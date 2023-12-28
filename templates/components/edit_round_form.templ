@@ -21,7 +21,9 @@ templ EditRoundForm(game skat.Game, round skat.Round, roundIdx int) {
 								<option selected?={ getRole(round, player.ID) == empty } value="">-</option>
 								<option selected?={ getRole(round, player.ID) == "declarer" } value="declarer">Declarer</option>
 								<option selected?={ getRole(round, player.ID) == "opponent" } value="opponent">Opponent</option>
-								<option selected?={ getRole(round, player.ID) == "dealer" } value="dealer">Dealer</option>
+								if len(game.Players) > 3 {
+									<option selected?={ getRole(round, player.ID) == "dealer" } value="dealer">Dealer</option>
+								}
 							</select>
 						</label>
 					}
