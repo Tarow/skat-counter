@@ -7,17 +7,17 @@ For data storage, SQLite is being used.
 
 ## Features
 
-- Create Skat-Games
+- Manage Skat-Games
   - Creation time
   - Did you play online (e.g. Tabletop Simulator) or in person?
   - How high is the stake?
   - Variable number of players
-- Edit games
-  - Stake & online/in person indicator can be changed at any time
-- Delete games
-  - Unwanted games can be deleted again
-- Add/modify & delete rounds
-
+- Manage Rounds
+  - Roles (Declarer, Opponents, Dealer)
+  - Declarer won the game?
+  - How much was the value of the game
+- Automated polling: data will be updated every 10 seconds, no need the refresh the page
+ 
 The features and calculations are designed towards the way that my friends and i play Skat, depending on your rules, it might not be suitable for you.
 
 ## Installation
