@@ -35,7 +35,7 @@ func GameOverviewNavbar() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a> <button onclick=\"create_game_modal.showModal()\" hx-target=\"#create_game_form\" hx-get=\"/games/create\" class=\"btn btn-primary justify-self-center col-span-1\" _=\"on htmx:afterSwap from #create_game_form call create_game_modal.showModal()\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a> <button hx-target=\"#create_game_form\" hx-get=\"/games/create\" class=\"btn btn-primary justify-self-center col-span-1\" _=\"on htmx:afterSwap from #create_game_form call create_game_modal.showModal()\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -86,11 +86,15 @@ func GameOverview(games []skat.Game) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div id=\"gamelist\" hx-get=\"/\" hx-select=\"#gamelist\" hx-swap=\"outerHTML\" hx-trigger=\"every 10s\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = component.GameList(games).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -2,6 +2,7 @@ package template
 
 import "github.com/tarow/skat-counter/internal/skat"
 import "github.com/tarow/skat-counter/templates/components"
+import "fmt"
 
 templ GameDetailsNavbar() {
 	<div class="navbar bg-base-200">
@@ -18,14 +19,26 @@ templ GameDetailsNavbar() {
 templ GameDetails (game skat.Game) {
 	@Base() {
 		@GameDetailsNavbar()
-		<div class="container flex pt-4 mx-auto">
-			<div class="flex w-full flex-row flex-wrap-reverse gap-8 justify-around  items-end">
-				@component.RoundsList(game)
+		<div class="container flex pt-4 mx-auto" hx-get={ fmt.Sprintf("/games/%v", game.ID) } hx-trigger="every 10s" hx-swap="none" hx-select-oob="#gamecard:outerHTML,#roundlist:outerHTML">
+			<div class="flex w-full flex-row flex-wrap-reverse gap-8 justify-around items-end" hx-disinherit="*">
+				<div id="roundlist">
+					@component.RoundsList(game)
+				</div>
 				<div class="flex flex-col items-center gap-4">
-					@component.GameCard(game, false, true, true)
-					@component.AddRoundForm(game)
+					<div id="gamecard">
+						@component.GameCard(game, false, true, true)
+					</div>
+					<div id="roundform">
+						@component.AddRoundForm(game)
+					</div>
 				</div>
 			</div>
 		</div>
+		<dialog id="edit_round_modal" class="modal">
+			<div id="edit_round_form"></div>
+		</dialog>
+		<dialog id="edit_game_modal" class="modal">
+			<div id="edit_game_form" class="modal-box"></div>
+		</dialog>
 	}
 }

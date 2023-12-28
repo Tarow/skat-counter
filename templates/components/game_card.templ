@@ -57,7 +57,7 @@ templ GameCard(game skat.Game, detailsBtn, editBtn, deleteBtn bool) {
 					{ fmt.Sprintf("%d", len(game.Rounds)) }
 				</div>
 			</div>
-			<div class="card-actions justify-end ">
+			<div class="card-actions justify-end" hx-disinherit="*">
 				if detailsBtn {
 					<a class="btn" hx-boost="true" href={ templ.URL(fmt.Sprintf("/games/%v", game.ID)) } method="get">
 						Details
@@ -86,9 +86,6 @@ templ GameCard(game skat.Game, detailsBtn, editBtn, deleteBtn bool) {
 			</div>
 		</div>
 	</div>
-	<dialog id="edit_game_modal" class="modal">
-		<div id="edit_game_form" class="modal-box"></div>
-	</dialog>
 }
 
 templ GameList(games []skat.Game) {

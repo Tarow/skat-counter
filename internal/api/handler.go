@@ -36,6 +36,16 @@ func (h Handler) GetIndex(c echo.Context) error {
 	return render(c, http.StatusOK, index)
 }
 
+func (h Handler) GetGameList(c echo.Context) error {
+	games, err := h.service.List()
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+	gameList := component.GameList(games)
+	return render(c, http.StatusOK, gameList)
+}
+
 func (h Handler) GetGameDetails(c echo.Context) error {
 	gameId := c.Param("id")
 

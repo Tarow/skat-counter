@@ -39,6 +39,7 @@ type Form struct {
 func registerRoutes(e *echo.Echo, handler api.Handler) {
 	e.StaticFS("/static", echo.MustSubFS(staticAssets, "static"))
 	e.GET("/", handler.GetIndex)
+	e.GET("/games", handler.GetGameList)
 
 	e.POST("/games", handler.CreateGame)
 	e.GET("/games/create", handler.GetCreateGameForm)
