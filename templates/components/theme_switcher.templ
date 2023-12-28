@@ -2,10 +2,7 @@ package component
 
 templ ThemeSwitcher() {
 	<div
- 		class="
-  bg-base-100 text-base-content sticky top-0 z-30 flex h-16justify-center bg-opacity-90 backdrop-blur transition-shadow duration-100 [transform:translate3d(0,0,0)] 
-  shadow-sm
-  "
+ 		class="dropdown dropdown-end hidden [@supports(color:oklch(0_0_0))]:block z-30"
 	>
 		<div title="Change Theme" class="dropdown dropdown-end hidden [@supports(color:oklch(0_0_0))]:block ">
 			<div tabindex="0" role="button" class="btn btn-ghost">
