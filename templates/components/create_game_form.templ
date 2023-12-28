@@ -1,6 +1,8 @@
 package component
 
-templ CreateGameForm() {
+import "github.com/tarow/skat-counter/internal/skat/gen/model"
+
+templ CreateGameForm(players []model.Player) {
 	<form method="dialog">
 		<div class="flex flex-col gap-8">
 			<h3 class="font-bold text-lg">Create Game</h3>
@@ -33,7 +35,7 @@ templ CreateGameForm() {
 				</div>
 			</div>
 			<div class="divider -m-2"></div>
-			@PlayerInput()
+			@PlayerInput(players)
 		</div>
 		<div class="modal-action">
 			<button hx-post="/games" hx-target="closest body" hx-swap="outerHTML" class="btn">Submit</button>

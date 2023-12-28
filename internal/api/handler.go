@@ -144,7 +144,12 @@ func (h Handler) EditGame(c echo.Context) error {
 }
 
 func (h Handler) GetCreateGameForm(c echo.Context) error {
-	form := component.CreateGameForm()
+	players, err := h.service.ListPlayers()
+	if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+	form := component.CreateGameForm(players)
 	return render(c, http.StatusOK, form)
 }
 

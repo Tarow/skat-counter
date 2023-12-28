@@ -1,10 +1,17 @@
 package component
 
-templ PlayerInput() {
+import "github.com/tarow/skat-counter/internal/skat/gen/model"
+
+templ PlayerInput(players []model.Player) {
 	<div class="grid grid-cols-6 gap-3 items-center">
 		<div class="col-span-3" id="player_names">
-			<input type="text" placeholder="Enter Player Name" class="w-full max-w-xs input input-bordered" id="player_input" onkeydown="handleKeyDown(event)"/>
+			<input type="text" autocomplete="off" list="playerlist" placeholder="Enter Player Name" class="w-full max-w-xs input input-bordered" id="player_input" onkeydown="handleKeyDown(event)"/>
 		</div>
+		<datalist id="playerlist">
+			for _, p := range players {
+				<option value={ p.Name }></option>
+			}
+		</datalist>
 		<div class="col-span-3">
 			<p class="flex justify-center">Players (Drag to sort)</p>
 		</div>

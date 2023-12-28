@@ -10,7 +10,9 @@ import "context"
 import "io"
 import "bytes"
 
-func CreateGameForm() templ.Component {
+import "github.com/tarow/skat-counter/internal/skat/gen/model"
+
+func CreateGameForm(players []model.Player) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -108,7 +110,7 @@ func CreateGameForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = PlayerInput().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = PlayerInput(players).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -10,7 +10,9 @@ import "context"
 import "io"
 import "bytes"
 
-func PlayerInput() templ.Component {
+import "github.com/tarow/skat-counter/internal/skat/gen/model"
+
+func PlayerInput(players []model.Player) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -23,7 +25,25 @@ func PlayerInput() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"grid grid-cols-6 gap-3 items-center\"><div class=\"col-span-3\" id=\"player_names\"><input type=\"text\" placeholder=\"Enter Player Name\" class=\"w-full max-w-xs input input-bordered\" id=\"player_input\" onkeydown=\"handleKeyDown(event)\"></div><div class=\"col-span-3\"><p class=\"flex justify-center\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"grid grid-cols-6 gap-3 items-center\"><div class=\"col-span-3\" id=\"player_names\"><input type=\"text\" autocomplete=\"off\" list=\"playerlist\" placeholder=\"Enter Player Name\" class=\"w-full max-w-xs input input-bordered\" id=\"player_input\" onkeydown=\"handleKeyDown(event)\"></div><datalist id=\"playerlist\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, p := range players {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<option value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(p.Name))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></option>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</datalist><div class=\"col-span-3\"><p class=\"flex justify-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
