@@ -1,9 +1,9 @@
 module github.com/tarow/skat-counter
 
-go 1.21.5
+go 1.21
 
 require (
-	github.com/a-h/templ v0.2.476
+	github.com/a-h/templ v0.2.501
 	github.com/go-jet/jet/v2 v2.10.1
 	github.com/labstack/echo/v4 v4.11.4
 	modernc.org/sqlite v1.28.0

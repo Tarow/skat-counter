@@ -87,12 +87,18 @@ templ AddRoundForm(game skat.Game) {
 							<div class="label">
 								<span class="label-text">{ player.Name }</span>
 							</div>
-							<select name={ player.Name } class="select select-sm select-bordered  w-full">
-								<option selected value="">-</option>
-								<option value="declarer">Declarer</option>
-								<option value="opponent">Opponent</option>
-								<option value="dealer">Dealer</option>
-							</select>
+							if len(game.Players)>3{
+								<select name={ player.Name } class="select select-sm select-bordered  w-full">
+									<option value="declarer" >Declarer</option>
+									<option value="opponent" selected >Opponent</option>
+									<option value="dealer">Dealer</option>
+								</select>
+							}else{
+								<select name={ player.Name } class="select select-sm select-bordered  w-full">
+									<option value="declarer" >Declarer</option>
+									<option value="opponent" selected >Opponent</option>
+								</select>
+							}
 						</label>
 					}
 				</div>
