@@ -80,7 +80,7 @@ templ AddRoundForm(game skat.Game) {
 	<div class="card  bg-base-200 shadow-xl">
 		<div class="card-body">
 			<h2 class="card-title">Round { fmt.Sprintf("%v", len(game.Rounds) + 1 ) }</h2>
-			<form>
+			<form hx-post={ fmt.Sprintf("/games/%v/rounds", game.ID) } hx-target="closest body">
 				<div class="flex flex-row flex-wrap gap-2 pb-4">
 					for _, player := range game.Players {
 						<label class="form-control">
@@ -117,7 +117,7 @@ templ AddRoundForm(game skat.Game) {
 					</div>
 				</div>
 				<div class="card-actions justify-end">
-					<button hx-post={ fmt.Sprintf("/games/%v/rounds", game.ID) } hx-target="closest body" class="btn btn-primary">Submit</button>
+					<button class="btn btn-primary">Submit</button>
 				</div>
 			</form>
 		</div>

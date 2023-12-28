@@ -49,7 +49,7 @@ templ EditGameForm(g skat.Game) {
 			</div>
 		</div>
 		<div class="modal-action">
-			<button hx-put={ fmt.Sprintf("/games/%v/edit", g.ID) } hx-target="closest body" hx-swap="outerHTML" class="btn">Submit</button>
+			<button hx-put={ fmt.Sprintf("/games/%v/edit", g.ID) } hx-target="#content" class="btn">Submit</button>
 			<button class="btn">Cancel</button>
 		</div>
 	</form>
