@@ -2,7 +2,7 @@ package template
 
 templ Base() {
 	<!DOCTYPE html>
-	<html data-theme="dim">
+	<html data-theme="default">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -10,12 +10,14 @@ templ Base() {
 			<link href="/static/daisyui.css" rel="stylesheet" type="text/css"/>
 			<script src="/static/tailwind.js"></script>
 			<script src="/static/htmx.js"></script>
-			<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+			<script src="/static/hyperscript.js"></script>
 			<script src="/static/sortable.js"></script>
+			<script src="/static/theme-change.js"></script>
 		</head>
 		<body>
 			{ children... }
 			@initSortable()
+			@initThemeChange()
 		</body>
 	</html>
 }
@@ -38,4 +40,9 @@ script initSortable() {
       });
     }
 	})
+}
+
+script initThemeChange() {
+	// init theme change listener (/static/theme-change.js)
+	themeChange(false) 
 }

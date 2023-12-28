@@ -26,7 +26,7 @@ func GameOverviewNavbar() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"navbar bg-base-200\"><div class=\"grid flex-grow grid-cols-3 justify-items-center\"><div></div><a class=\"btn btn-ghost text-xl\" hx-boost=\"true\" href=\"/\" method=\"get\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"navbar bg-base-200\"><div class=\"grid flex-grow grid-cols-4 sm:grid-cols-5 justify-items-center\"><div class=\"hidden sm:flex sm:col-span-2\"></div><a class=\"btn col-span-2 sm:col-span-1 btn-ghost text-xl\" hx-boost=\"true\" href=\"/\" method=\"get\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -35,7 +35,7 @@ func GameOverviewNavbar() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a> <button onclick=\"create_game_modal.showModal()\" hx-target=\"#create_game_form\" hx-get=\"/games/create\" class=\"btn btn-primary justify-self-start\" _=\"on htmx:afterSwap from #create_game_form call create_game_modal.showModal()\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a> <button onclick=\"create_game_modal.showModal()\" hx-target=\"#create_game_form\" hx-get=\"/games/create\" class=\"btn btn-primary justify-self-center col-span-1\" _=\"on htmx:afterSwap from #create_game_form call create_game_modal.showModal()\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -44,7 +44,15 @@ func GameOverviewNavbar() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div></div><dialog id=\"create_game_modal\" class=\"modal\"><div id=\"create_game_form\" class=\"modal-box\"></div></dialog>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button><div class=\"col-span-1\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = component.ThemeSwitcher().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><dialog id=\"create_game_modal\" class=\"modal\"><div id=\"create_game_form\" class=\"modal-box\"></div></dialog>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

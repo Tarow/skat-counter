@@ -145,7 +145,7 @@ func (s Service) Create(g Game) (Game, error) {
 	return g, nil
 }
 
-func (s Service) EditGame(g Game) (Game, error) {
+func (s Service) UpdateGame(g Game) (Game, error) {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return Game{}, err
@@ -228,7 +228,7 @@ func (s Service) AddRound(round Round) (Round, error) {
 	return round, nil
 }
 
-func (s Service) EditRound(round Round) (Round, error) {
+func (s Service) UpdateRound(round Round) (Round, error) {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return Round{}, err
@@ -245,7 +245,7 @@ func (s Service) EditRound(round Round) (Round, error) {
 
 	// Update round
 	updateRound := table.Round.UPDATE(
-		table.Round.AllColumns.Except(table.Round.ID),
+		table.Round.AllColumns.Except(table.Round.ID, table.Round.CreatedAt),
 	).WHERE(table.Round.ID.EQ(sqlite.Int32(round.ID))).
 		MODEL(round)
 	_, err = updateRound.Exec(tx)

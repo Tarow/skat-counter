@@ -26,7 +26,7 @@ func GameCard(game skat.Game, detailsBtn, editBtn, deleteBtn bool) templ.Compone
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"card w-96 image-full\"><figure><img src=\"https://w.wallhaven.cc/full/vm/wallhaven-vmgl8m.jpg\" alt=\"Cards\"></figure><div class=\"flex justify-end\"><div class=\"badge mr-2 mt-2 z-30\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"card w-96 image-full\"><figure><img src=\"https://w.wallhaven.cc/full/vm/wallhaven-vmgl8m.jpg\" alt=\"Cards\"></figure><div class=\"flex justify-end\"><div class=\"badge mr-2 mt-2 z-20\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

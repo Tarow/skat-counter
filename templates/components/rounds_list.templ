@@ -55,13 +55,14 @@ templ RoundsList(game skat.Game) {
 					</tr>
 				}
 			</tbody>
-			<tfoot class="border-t">
+			<tfoot class="border-t-2">
 				<tr>
 					<td class="text-center">Total</td>
 					for _, player := range game.Players {
 						<td class="text-center">{ fmt.Sprintf("%v", game.GetTotalPlayerScore(player) ) }</td>
 					}
-					<th class="text-center"></th>
+					<th></th>
+					<th></th>
 				</tr>
 				<tr>
 					<td>Payment</td>
@@ -69,6 +70,7 @@ templ RoundsList(game skat.Game) {
 						<td class="text-center">{ fmt.Sprintf("%.2f €", float32(game.GetTotalPlayerScore(player))*game.Stake / float32(100)) }</td>
 					}
 					<th class="text-center">{ fmt.Sprintf("%.2f €", float32(game.GetTotalPayment()) / float32(100)) }</th>
+					<th></th>
 				</tr>
 			</tfoot>
 		</table>

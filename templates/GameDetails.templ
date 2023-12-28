@@ -6,9 +6,11 @@ import "github.com/tarow/skat-counter/templates/components"
 templ GameDetailsNavbar() {
 	<div class="navbar bg-base-200">
 		<div class="grid flex-grow grid-cols-3 justify-items-center">
-			<a class="col-span-3 btn btn-ghost text-xl" hx-boost="true" href="/" method="get">
+			<div></div>
+			<a class="btn btn-ghost text-xl" hx-boost="true" href="/" method="get">
 				Skatcounter
 			</a>
+			@component.ThemeSwitcher()
 		</div>
 	</div>
 }

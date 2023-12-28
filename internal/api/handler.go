@@ -123,7 +123,7 @@ func (h Handler) EditGame(c echo.Context) error {
 		return slices.Index(form.Players, i.Name) - slices.Index(form.Players, j.Name)
 	})
 
-	updatedGame, err := h.service.EditGame(*game)
+	updatedGame, err := h.service.UpdateGame(*game)
 	if err != nil {
 		return err
 	}
@@ -227,7 +227,7 @@ func (h Handler) EditRound(c echo.Context) error {
 	}
 	round.ID = int32(parsedRoundId)
 
-	updatedRound, err := h.service.EditRound(round)
+	updatedRound, err := h.service.UpdateRound(round)
 	if err != nil {
 		c.Logger().Error(err)
 		return err

@@ -23,7 +23,7 @@ func PlayerInput() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"grid grid-cols-6 gap-3 items-center\"><div class=\"col-span-3\" id=\"player_names\"><input type=\"text\" placeholder=\"Enter Player Name\" class=\"input input-bordered\" id=\"player_input\" onkeydown=\"handleKeyDown(event)\"></div><div class=\"col-span-3\"><p class=\"flex justify-center\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"grid grid-cols-6 gap-3 items-center\"><div class=\"col-span-3\" id=\"player_names\"><input type=\"text\" placeholder=\"Enter Player Name\" class=\"w-full max-w-xs input input-bordered\" id=\"player_input\" onkeydown=\"handleKeyDown(event)\"></div><div class=\"col-span-3\"><p class=\"flex justify-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
