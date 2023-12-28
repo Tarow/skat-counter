@@ -43,7 +43,7 @@ templ EditRoundForm(game skat.Game, round skat.Round, roundIdx int) {
 					</div>
 				</div>
 				<div class="card-actions justify-end pt-5 modal-action">
-					<button hx-put={ fmt.Sprintf("/games/%v/rounds/%v", game.ID, round.ID) } hx-target="closest body" class="btn btn-primary">Submit</button>
+					<button hx-put={ fmt.Sprintf("/games/%v/rounds/%v", game.ID, round.ID) } hx-target="#content" class="btn btn-primary">Submit</button>
 					<button class="btn">Cancel</button>
 				</div>
 			</form>

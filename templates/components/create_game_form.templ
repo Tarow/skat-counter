@@ -38,7 +38,7 @@ templ CreateGameForm(players []model.Player) {
 			@PlayerInput(players)
 		</div>
 		<div class="modal-action">
-			<button hx-post="/games" hx-target="closest body" hx-swap="outerHTML" class="btn">Submit</button>
+			<button hx-post="/games" hx-target="#content" class="btn">Submit</button>
 			<button class="btn">Cancel</button>
 		</div>
 	</form>
