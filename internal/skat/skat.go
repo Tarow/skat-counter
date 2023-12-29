@@ -1,6 +1,7 @@
 package skat
 
 import (
+	"fmt"
 	"slices"
 
 	"github.com/tarow/skat-counter/internal/skat/gen/model"
@@ -30,6 +31,14 @@ func (g Game) GetTotalPlayerScore(player model.Player) int32 {
 		}
 	}
 	return sum
+}
+
+func (g Game) FormatTotalPlayerPayment(player model.Player) string {
+	return fmt.Sprintf("%.2f €", float32(g.GetTotalPlayerScore(player))*g.Stake/float32(100))
+}
+
+func (g Game) FormatTotalPayment() string {
+	return fmt.Sprintf("%.2f €", float32(g.GetTotalPayment())/float32(100))
 }
 
 func (g Game) GetTotalPayment() float32 {

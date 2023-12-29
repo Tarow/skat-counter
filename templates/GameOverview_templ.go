@@ -26,7 +26,7 @@ func GameOverviewNavbar() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"navbar bg-base-200\"><div class=\"grid flex-grow grid-cols-4 sm:grid-cols-5 justify-items-center\"><div class=\"hidden sm:flex sm:col-span-2\"></div><a class=\"btn col-span-2 sm:col-span-1 btn-ghost text-xl\" hx-boost=\"true\" href=\"/\" method=\"get\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"navbar sticky top-0 z-50 bg-base-200 shadow-xl\"><div class=\"grid flex-grow grid-cols-4 sm:grid-cols-5 justify-items-center\"><div class=\"hidden sm:flex sm:col-span-2\"></div><a class=\"btn col-span-2 sm:col-span-1 btn-ghost text-xl\" hx-boost=\"true\" href=\"/\" method=\"get\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

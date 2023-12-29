@@ -5,7 +5,7 @@ import "github.com/tarow/skat-counter/templates/components"
 import "fmt"
 
 templ GameDetailsNavbar() {
-	<div class="navbar bg-base-200">
+	<div class="navbar sticky top-0 z-50 bg-base-200 shadow-xl">
 		<div class="grid flex-grow grid-cols-3 justify-items-center">
 			<div></div>
 			<a class="btn btn-ghost text-xl" hx-boost="true" href="/" method="get">
@@ -18,14 +18,15 @@ templ GameDetailsNavbar() {
 
 templ GameDetails (game skat.Game) {
 	@Base() {
+		<div hx-get={ fmt.Sprintf("/games/%v", game.ID) } hx-trigger="every 10s" hx-swap="none" hx-select-oob="#gamecard:outerHTML,#roundlist:outerHTML"></div>
 		@GameDetailsNavbar()
-		<div class="container flex pt-4 mx-auto" hx-get={ fmt.Sprintf("/games/%v", game.ID) } hx-swap="none" hx-select-oob="#gamecard:outerHTML,#roundlist:outerHTML">
-			<div class="flex w-full flex-row flex-wrap-reverse gap-8 justify-around items-end" hx-disinherit="*">
-				<div id="roundlist" class="p-2 w-full sm:w-fit justify-center">
+		<div class="container flex p-2  pt-4 mx-auto">
+			<div class="flex w-full flex-row flex-wrap-reverse gap-8 justify-around items-end">
+				<div id="roundlist" class=" justify-center">
 					<div class="hidden sm:flex justify-center">
 						@component.RoundsTable(game)
 					</div>
-					<div class="sm:hidden flex">
+					<div class="sm:hidden flex w-full justify-center">
 						@component.RoundGrid(game)
 					</div>
 				</div>

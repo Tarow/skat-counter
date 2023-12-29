@@ -27,7 +27,7 @@ func GameDetailsNavbar() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"navbar bg-base-200\"><div class=\"grid flex-grow grid-cols-3 justify-items-center\"><div></div><a class=\"btn btn-ghost text-xl\" hx-boost=\"true\" href=\"/\" method=\"get\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"navbar sticky top-0 z-50 bg-base-200 shadow-xl\"><div class=\"grid flex-grow grid-cols-3 justify-items-center\"><div></div><a class=\"btn btn-ghost text-xl\" hx-boost=\"true\" href=\"/\" method=\"get\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -74,11 +74,7 @@ func GameDetails(game skat.Game) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			templ_7745c5c3_Err = GameDetailsNavbar().Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"container flex pt-4 mx-auto\" hx-get=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div hx-get=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -86,7 +82,15 @@ func GameDetails(game skat.Game) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"none\" hx-select-oob=\"#gamecard:outerHTML,#roundlist:outerHTML\"><div class=\"flex w-full flex-row flex-wrap-reverse gap-8 justify-around items-end\" hx-disinherit=\"*\"><div id=\"roundlist\" class=\"p-2 w-full sm:w-fit justify-center\"><div class=\"hidden sm:flex justify-center\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-trigger=\"every 10s\" hx-swap=\"none\" hx-select-oob=\"#gamecard:outerHTML,#roundlist:outerHTML\"></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = GameDetailsNavbar().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"container flex p-2  pt-4 mx-auto\"><div class=\"flex w-full flex-row flex-wrap-reverse gap-8 justify-around items-end\"><div id=\"roundlist\" class=\" justify-center\"><div class=\"hidden sm:flex justify-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -94,7 +98,7 @@ func GameDetails(game skat.Game) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"sm:hidden flex\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"sm:hidden flex w-full justify-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
