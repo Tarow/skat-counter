@@ -154,6 +154,7 @@ func (h Handler) GetCreateGameForm(c echo.Context) error {
 }
 
 func (h Handler) DeleteGame(c echo.Context) error {
+	c.Logger().Info("received delete request")
 	parsedId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return err

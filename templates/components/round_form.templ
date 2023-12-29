@@ -6,6 +6,49 @@ import "slices"
 
 const empty = ""
 
+templ AddRoundForm(game skat.Game) {
+	<div class="card  bg-base-200 shadow-xl">
+		<div class="card-body">
+			<h2 class="card-title">Round { fmt.Sprintf("%v", len(game.Rounds) + 1 ) }</h2>
+			<form hx-post={ fmt.Sprintf("/games/%v/rounds", game.ID) } hx-target="#content">
+				<div class="flex flex-row flex-wrap gap-2 pb-4">
+					for _, player := range game.Players {
+						<label class="form-control">
+							<div class="label">
+								<span class="label-text">{ player.Name }</span>
+							</div>
+							<select name={ player.Name } class="select select-sm select-bordered  w-full">
+								<option value="declarer">Declarer</option>
+								<option value="opponent" selected>Opponent</option>
+								if len(game.Players) > 3 {
+									<option value="dealer">Dealer</option>
+								}
+							</select>
+						</label>
+					}
+				</div>
+				<div class="flex flex-row flex-wrap gap-6 items-center">
+					<div class="form-control">
+						<div class="label">
+							<span class="label-text">Game Value</span>
+						</div>
+						<input id="gamevalue" required name="gamevalue" type="number" min="1" max="300" class="w-48 input input-sm input-bordered"/>
+					</div>
+					<div class="form-control">
+						<label class="cursor-pointer flex items-center gap-2">
+							<span class="label-text">Won</span>
+							<input checked value="true" id="won" name="won" type="checkbox" value="true" class="checkbox checkbox-primary"/>
+						</label>
+					</div>
+				</div>
+				<div class="card-actions justify-end">
+					<button class="btn btn-primary">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+}
+
 templ EditRoundForm(game skat.Game, round skat.Round, roundIdx int) {
 	<div class="card bg-base-200 shadow-xl">
 		<div class="card-body">
@@ -49,6 +92,13 @@ templ EditRoundForm(game skat.Game, round skat.Round, roundIdx int) {
 			</form>
 		</div>
 	</div>
+}
+
+func formatRoundScore(score *int32) string {
+	if score == nil {
+		return "-"
+	}
+	return fmt.Sprintf("%v", *score)
 }
 
 func getRole(round skat.Round, playerId int32) string {

@@ -86,15 +86,23 @@ func GameDetails(game skat.Game) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-trigger=\"every 10s\" hx-swap=\"none\" hx-select-oob=\"#gamecard:outerHTML,#roundlist:outerHTML\"><div class=\"flex w-full flex-row flex-wrap-reverse gap-8 justify-around items-end\" hx-disinherit=\"*\"><div id=\"roundlist\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"none\" hx-select-oob=\"#gamecard:outerHTML,#roundlist:outerHTML\"><div class=\"flex w-full flex-row flex-wrap-reverse gap-8 justify-around items-end\" hx-disinherit=\"*\"><div id=\"roundlist\" class=\"p-2 w-full sm:w-fit justify-center\"><div class=\"hidden sm:flex justify-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = component.RoundsList(game).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = component.RoundsTable(game).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"flex flex-col items-center gap-4\"><div id=\"gamecard\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"sm:hidden flex\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = component.RoundGrid(game).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"flex flex-col items-center gap-4\"><div id=\"gamecard\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
