@@ -16,17 +16,22 @@ templ GameDetailsNavbar() {
 	</div>
 }
 
+
+const poll = false
+ 
 templ GameDetails (game skat.Game) {
 	@Base() {
-		<div hx-get={ fmt.Sprintf("/games/%v", game.ID) } hx-trigger="every 10s" hx-swap="none" hx-select-oob="#gamecard:outerHTML,#roundlist:outerHTML"></div>
+		if poll {
+			<div hx-get={ fmt.Sprintf("/games/%v", game.ID) } hx-trigger="every 10s" hx-swap="none" hx-select-oob="#gamecard:outerHTML,#roundlist:outerHTML"></div>
+		}
 		@GameDetailsNavbar()
 		<div class="container flex p-2  pt-4 mx-auto">
-			<div class="flex w-full flex-row flex-wrap-reverse gap-8 justify-around items-end">
-				<div id="roundlist" class=" justify-center">
-					<div class="hidden sm:flex justify-center">
+			<div class="flex w-full flex-row flex-wrap-reverse justify-around gap-8 items-end">
+				<div id="roundlist">
+					<div class="hidden sm:flex">
 						@component.RoundsTable(game)
 					</div>
-					<div class="sm:hidden flex w-full justify-center">
+					<div class="sm:hidden flex">
 						@component.RoundGrid(game)
 					</div>
 				</div>
