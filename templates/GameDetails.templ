@@ -25,13 +25,13 @@ templ GameDetails (game skat.Game) {
 			<div hx-get={ fmt.Sprintf("/games/%v", game.ID) } hx-trigger="every 10s" hx-swap="none" hx-select-oob="#gamecard:outerHTML,#roundlist:outerHTML"></div>
 		}
 		@GameDetailsNavbar()
-		<div class="container flex p-2  pt-4 mx-auto">
-			<div class="flex w-full flex-row flex-wrap-reverse justify-around gap-8 items-end">
-				<div id="roundlist">
+		<div class="container flex p-2 pt-4 mx-auto">
+			<div class="flex w-full flex-row flex-wrap-reverse justify-evenly gap-8 items-end">
+				<div id="roundlist" class="w-full sm:w-fit">
 					<div class="hidden sm:flex">
 						@component.RoundsTable(game)
 					</div>
-					<div class="sm:hidden flex">
+					<div class="block sm:hidden">
 						@component.RoundGrid(game)
 					</div>
 				</div>

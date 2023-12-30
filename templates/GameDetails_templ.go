@@ -98,7 +98,7 @@ func GameDetails(game skat.Game) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"container flex p-2  pt-4 mx-auto\"><div class=\"flex w-full flex-row flex-wrap-reverse justify-around gap-8 items-end\"><div id=\"roundlist\"><div class=\"hidden sm:flex\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"container flex p-2 pt-4 mx-auto\"><div class=\"flex w-full flex-row flex-wrap-reverse justify-evenly gap-8 items-end\"><div id=\"roundlist\" class=\"w-full sm:w-fit\"><div class=\"hidden sm:flex\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -106,7 +106,7 @@ func GameDetails(game skat.Game) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"sm:hidden flex\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"block sm:hidden\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

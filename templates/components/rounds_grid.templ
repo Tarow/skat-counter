@@ -71,8 +71,8 @@ templ TotalEntry(game skat.Game) {
 }
 
 templ RoundGrid(game skat.Game) {
-	<div class="card bg-base-200 shadow-xl ">
-	<div class="max-h-[50dvh] overflow-scroll">
+	<div class="card bg-base-200 shadow-xl">
+		<div class="max-h-[50dvh] overflow-scroll">
 			for idx, round := range game.Rounds {
 				<div >
 					@RoundEntry(game.Players, round, idx)
